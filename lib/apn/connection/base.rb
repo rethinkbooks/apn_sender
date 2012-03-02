@@ -70,7 +70,13 @@ module APN
         
         log_and_die("Missing certificate path. Please specify :cert_path when initializing class.") unless @opts[:cert_path]
         
-        cert_name = apn_production? ? "apn_production.pem" : "apn_development.pem"
+        cert_name = if apn_production?
+          "apn_production.pem"
+        elsif @opts[:environment]
+          "apn_#{@opts[:environment]}.pem"
+        else
+          "apn_development.pem"
+        end
         cert_path = File.join(@opts[:cert_path], @opts[:app], cert_name)
 
         @apn_cert = File.exists?(cert_path) ? File.read(cert_path) : nil
