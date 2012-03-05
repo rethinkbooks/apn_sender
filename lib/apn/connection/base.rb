@@ -59,7 +59,11 @@ module APN
       end
       
       def apn_production?
-        @opts[:environment] && @opts[:environment] != '' && :production == @opts[:environment].to_sym
+        @opts[:environment] && @opts[:environment] != '' && (:dev != @opts[:environment].to_sym || :development != @opts[:environment].to_sym)
+      end
+      
+      def apn_development?
+        @opts[:environment] && @opts[:environment] != '' && @opts[:environment].match /dev/
       end
       
       # Get a fix on the .pem certificate we'll be using for SSL
@@ -70,13 +74,7 @@ module APN
         
         log_and_die("Missing certificate path. Please specify :cert_path when initializing class.") unless @opts[:cert_path]
         
-        cert_name = if apn_production?
-          "apn_production.pem"
-        elsif @opts[:environment]
-          "apn_#{@opts[:environment]}.pem"
-        else
-          "apn_development.pem"
-        end
+        cert_name = @opts[:environment] && @opts[:environment] != "" ? "apn_#{@opts[:environment]}.pem" : "apn_development.pem"
         cert_path = File.join(@opts[:cert_path], @opts[:app], cert_name)
 
         @apn_cert = File.exists?(cert_path) ? File.read(cert_path) : nil
