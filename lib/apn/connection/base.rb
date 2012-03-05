@@ -59,7 +59,7 @@ module APN
       end
       
       def apn_production?
-        @opts[:environment] && @opts[:environment] != '' && (:dev != @opts[:environment].to_sym || :development != @opts[:environment].to_sym)
+        @opts[:environment] && @opts[:environment] != '' && (:dev != @opts[:environment].to_sym && :development != @opts[:environment].to_sym)
       end
       
       # Get a fix on the .pem certificate we'll be using for SSL
