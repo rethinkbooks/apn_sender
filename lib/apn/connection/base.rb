@@ -62,6 +62,10 @@ module APN
         @opts[:environment] && @opts[:environment] != '' && (:dev != @opts[:environment].to_sym || :development != @opts[:environment].to_sym)
       end
       
+      def apn_development?
+        @opts[:environment] && @opts[:environment] != '' && @opts[:environment].match /dev/
+      end
+      
       # Get a fix on the .pem certificate we'll be using for SSL
       def setup_paths
         # Set option defaults
