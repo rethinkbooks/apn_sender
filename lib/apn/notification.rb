@@ -60,8 +60,10 @@ module APN
     # into the root of the hash to encode and send to apple.
     def packaged_message
       opts = @options.clone # Don't destroy our pristine copy
-      hsh = {'aps' => {}}
-      hsh['aps']['alert'] = opts.delete(:alert).to_s if opts[:alert]
+      hsh = {'aps' => {'alert' => {}}}
+      opts[:alert].keys.each do |key|
+        hsh['aps']['alert'][key.to_s] = opts[:alert].delete(key.to_sym)
+      end
       hsh['aps']['badge'] = opts.delete(:badge).to_i if opts[:badge]
       if sound = opts.delete(:sound)
         hsh['aps']['sound'] = sound.is_a?(TrueClass) ? 'default' : sound.to_s
