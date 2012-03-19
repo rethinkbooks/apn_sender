@@ -64,6 +64,7 @@ module APN
       opts[:alert].keys.each do |key|
         hsh['aps']['alert'][key.to_s] = opts[:alert].delete(key.to_sym)
       end
+      opts.delete(:alert) if opts[:alert]
       hsh['aps']['badge'] = opts.delete(:badge).to_i if opts[:badge]
       if sound = opts.delete(:sound)
         hsh['aps']['sound'] = sound.is_a?(TrueClass) ? 'default' : sound.to_s
