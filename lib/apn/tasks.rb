@@ -8,6 +8,8 @@ namespace :apn do
   task :sender => :setup do
     require 'apn'
 
+    Resque.redis = ENV['REDIS'] if ENV['REDIS']
+
     worker = nil
 
     begin
