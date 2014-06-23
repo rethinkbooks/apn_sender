@@ -23,7 +23,11 @@ module Resque
       msg << " with #{args.inspect}" if args.any?
       log msg
 
-      args.any? ? hook.call(*args) : hook.call
+      if hook.present? && args.any?
+        hook.call(*args)
+      elsif hook.present? && !args.any?
+        hook.call
+      end
     end
     
   end
