@@ -23,10 +23,10 @@ module Resque
       msg << " with #{args.inspect}" if args.any?
       log msg
 
-      if (!hook.nil? && !hook.empty?) && args.any?
-        hook.call(*args)
-      elsif (!hook.nil? && !hook.empty?) && !args.any?
-        hook.call
+      if hook.is_a?(Array) && !hook.nil? && !hook.empty?
+        args.any? ? hook.call(*args) : hook.call        
+      elsif !hook.is_a?(Array) && !hook.nil?
+        args.any? ? hook.call(*args) : hook.call
       end
     end
     
